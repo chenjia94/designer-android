@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_title_bar"
+    android:layout_width="fill_parent"
+    android:layout_height="50.0dip"
+    android:background="#fff2f2f2"
+    android:visibility="visible" >
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10.0dip"
+        android:text=""
+        android:textColor="#ff252525"
+        android:textSize="18.0sp" />
+
+    <ImageButton
+        android:id="@+id/add_friends"
+        android:layout_width="50.0dip"
+        android:layout_height="50.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="50.0dip"
+        android:background="@drawable/btn_title_return_bg"
+        android:src="@drawable/add_user_icon" />
+
+    <ImageButton
+        android:id="@+id/set_profile"
+        android:layout_width="50.0dip"
+        android:layout_height="50.0dip"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/btn_title_return_bg"
+        android:src="@drawable/set_profile_icon" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:layout_alignParentBottom="true"
+        android:background="#ffeeeeee" />
+
+</RelativeLayout>

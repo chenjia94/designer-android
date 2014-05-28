@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="bg"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bmp_splash_bg" />
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="220.0dip"
+        android:src="@drawable/logo_nice_splash" />
+
+
+    <ImageButton
+        android:id="@+id/wbLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60.0dip"
+        android:background="#00000000"
+        android:src="@drawable/btn_login_weibo"
+        android:visibility="visible" />
+    
+    
+     <ImageButton
+        android:id="@+id/wbLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="120.0dip"
+        android:background="#00000000"
+        android:src="@drawable/btn_login_weibo"
+        android:visibility="visible" />
+
+</RelativeLayout>
