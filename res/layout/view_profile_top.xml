@@ -63,7 +63,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="照片"
+                    android:text="专辑"
                     android:textColor="#ff999999"
                     android:textSize="12.0sp" />
             </LinearLayout>

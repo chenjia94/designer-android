@@ -55,52 +55,10 @@ public class Activity_Main extends BaseActivity {
 	private View tab2View;
 	private View tab3View;
 	
+	/*下拉控件*/
 	private PullToRefreshListView pullToRefreshView1;
 	private PullToRefreshListView pullToRefreshView2;
 	
-	private Handler tabDataHandler = new Handler(){
-		@SuppressWarnings("unchecked")
-		public void handleMessage(Message msg) {
-			switch(msg.what){
-				case 1:
-					Map<String, Object> tab1DataMap = (Map<String, Object>) msg.obj;
-					if(tab1DataMap!=null){
-						List<Album> albumList = (List<Album>) tab1DataMap.get("albumList");
-						if(albumList!=null&&albumList.size()>0){
-							
-							List<Album> oldAlbumList = listView1Adapter.getAlbumList();
-							if(oldAlbumList==null){
-								oldAlbumList = new ArrayList<Album>();
-							}
-							oldAlbumList.addAll(0, albumList);
-							listView1Adapter.setAlbumList(oldAlbumList);
-							
-							listView1Adapter.notifyDataSetChanged();
-						}
-					}
-					pullToRefreshView1.onRefreshComplete();
-					break;
-				case 2:
-					Map<String, Object> tab2DataMap = (Map<String, Object>) msg.obj;
-					if(tab2DataMap!=null){
-						List<Album> albumList = (List<Album>) tab2DataMap.get("albumList");
-						if(albumList!=null&&albumList.size()>0){
-							List<Album> oldAlbumList = listView2Adapter.getAlbumList();
-							if(oldAlbumList==null){
-								oldAlbumList = new ArrayList<Album>();
-							}
-							oldAlbumList.addAll(0, albumList);
-							listView2Adapter.setAlbumList(oldAlbumList);
-							listView2Adapter.notifyDataSetChanged();
-						}
-					}
-					pullToRefreshView2.onRefreshComplete();
-					break;
-				default:
-					break;
-			}
-		};
-	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -217,6 +175,16 @@ public class Activity_Main extends BaseActivity {
 					ImageLoader.loadImage(album.getCoverMediumImg(), coverView);
 				}
 				
+				View designerView = (View) albumItemView.findViewById(R.id.designerContainer);
+				designerView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						Intent intent = new Intent(context, Activity_UserInfo.class);
+						context.startActivity(intent);
+					}
+				});
+				
+				
 				ImageView avatarView = (ImageView) albumItemView.findViewById(R.id.avatar);
 				ImageLoader.loadImage("http://img.jinwanr.com.cn/staticFile/avatar/100/100009.jpg", avatarView);
 				
@@ -328,7 +296,6 @@ public class Activity_Main extends BaseActivity {
 	};
 	
 	
-	
 	private void getAlbums(final int albumTailId, final int tabIndex) {
 		//启动线程获取数据
 		Thread thread = new Thread(new Runnable() {
@@ -347,4 +314,49 @@ public class Activity_Main extends BaseActivity {
 		});
 		thread.start();
 	}
+	
+	
+	private Handler tabDataHandler = new Handler(){
+		@SuppressWarnings("unchecked")
+		public void handleMessage(Message msg) {
+			switch(msg.what){
+				case 1:
+					Map<String, Object> tab1DataMap = (Map<String, Object>) msg.obj;
+					if(tab1DataMap!=null){
+						List<Album> albumList = (List<Album>) tab1DataMap.get("albumList");
+						if(albumList!=null&&albumList.size()>0){
+							
+							List<Album> oldAlbumList = listView1Adapter.getAlbumList();
+							if(oldAlbumList==null){
+								oldAlbumList = new ArrayList<Album>();
+							}
+							oldAlbumList.addAll(0, albumList);
+							listView1Adapter.setAlbumList(oldAlbumList);
+							
+							listView1Adapter.notifyDataSetChanged();
+						}
+					}
+					pullToRefreshView1.onRefreshComplete();
+					break;
+				case 2:
+					Map<String, Object> tab2DataMap = (Map<String, Object>) msg.obj;
+					if(tab2DataMap!=null){
+						List<Album> albumList = (List<Album>) tab2DataMap.get("albumList");
+						if(albumList!=null&&albumList.size()>0){
+							List<Album> oldAlbumList = listView2Adapter.getAlbumList();
+							if(oldAlbumList==null){
+								oldAlbumList = new ArrayList<Album>();
+							}
+							oldAlbumList.addAll(0, albumList);
+							listView2Adapter.setAlbumList(oldAlbumList);
+							listView2Adapter.notifyDataSetChanged();
+						}
+					}
+					pullToRefreshView2.onRefreshComplete();
+					break;
+				default:
+					break;
+			}
+		};
+	};
 }

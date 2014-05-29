@@ -14,6 +14,11 @@ import com.google.gson.reflect.TypeToken;
 
 public class ApiUtil {
 	
+	/**
+	 * 主屏的产品列表
+	 * @param albumTailId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static JsonResultBean getAlbumList(int albumTailId){
 		
@@ -47,6 +52,12 @@ public class ApiUtil {
 		return null;
 	}
 	
+	
+	/**
+	 * 获取产品详情
+	 * @param albumId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static JsonResultBean getAlbumInfo(int albumId){
 		
@@ -79,7 +90,12 @@ public class ApiUtil {
 		return null;
 	}
 	
-	
+	/**
+	 * 获取产品的评论列表
+	 * @param albumId
+	 * @param commentsTailId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static JsonResultBean getAlbumComments(int albumId, int commentsTailId){
 		String albumCommentsUrl = Config.JINWAN_API_PREFIX+"/moreComments.json?albumId="+albumId+"&commentsTailId="+commentsTailId;

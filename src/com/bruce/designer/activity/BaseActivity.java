@@ -14,7 +14,7 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		context = BaseActivity.this;
+		context = this;
 		AppManager.getInstance().addActivity(this);
 		requestWindowFeature(Window.FEATURE_NO_TITLE); 
 	}
