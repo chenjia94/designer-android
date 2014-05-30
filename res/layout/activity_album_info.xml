@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         >
     
-    <include layout="@layout/item_album_slides_view" />
+    <include layout="@layout/item_album_info_view" />
     
 	</ScrollView>
     

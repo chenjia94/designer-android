@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- 专辑详情页中的ui布局 -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     android:paddingBottom="20.0dip" >
+	
+    <!-- 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:background="@color/grey_button_normal_color" />
+	-->
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -19,14 +29,14 @@
             android:id="@+id/txtTime"
             android:layout_width="80.0dip"
             android:layout_height="fill_parent"
-            android:layout_toLeftOf="@+id/btnFollow"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10.0dip"
             android:layout_marginRight="8.0dip"
+            android:layout_toLeftOf="@+id/btnFollow"
             android:gravity="right|center"
             android:text=""
             android:textColor="#ff999999"
-            android:textSize="13.0sp"/>
+            android:textSize="13.0sp" />
 
         <Button
             android:id="@+id/btnFollow"
@@ -39,7 +49,7 @@
             android:background="@drawable/follow_button_bg"
             android:text="关注"
             android:textColor="#ffffffff"
-            android:textSize="12.0sp"/>
+            android:textSize="12.0sp" />
 
         <Button
             android:id="@+id/btnFollowed"
@@ -113,66 +123,9 @@
                 android:visibility="visible" />
         </RelativeLayout>
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/imgContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-		android:padding="1dp"
-        android:gravity="center"
-        >
-		
-        
-		<GridView
-        android:id="@+id/grid"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:columnWidth="100dp"
-        android:gravity="center"
-        android:horizontalSpacing="2dp"
-        android:verticalSpacing="2dp"
-        android:numColumns="auto_fit"
-        android:scrollbars="vertical"
-        android:scrollbarStyle="insideOverlay"
-        android:stretchMode="columnWidth"
-        />
-		
-        <!-- 
-		<com.bruce.designer.view.AlbumImagesView
-            android:id="@+id/feed_image" 
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="8dip" />
-		-->
-		         	
-        <!-- 
-
-        
-        <ImageView
-            android:id="@+id/imgWatermark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="10.0dip"
-            android:layout_marginTop="10.0dip"
-            android:src="@drawable/watermark"
-            android:visibility="invisible" />
-
-	  
-        
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:indeterminate="true"
-            android:visibility="gone" />
-        -->
-          
-    </RelativeLayout>
+	
+    <!-- include slider view -->
+    <include layout="@layout/album_slides_grid_view"/>
 
     <LinearLayout
         android:id="@+id/txtContainer"
@@ -236,7 +189,7 @@
             android:text="评论"
             android:textColor="@color/txt_zan_color"
             android:textSize="12.0sp" />
-		
+
         <Button
             android:id="@+id/btnFavorite"
             android:layout_width="60.0dip"
@@ -250,20 +203,68 @@
             android:text="收藏"
             android:textColor="@color/txt_zan_color"
             android:textSize="12.0sp" />
-        
-        
+
         <Button
             android:id="@+id/btnShare"
             android:layout_width="60.0dip"
             android:layout_height="28.0dip"
             android:layout_alignParentRight="true"
+            android:background="@drawable/btn_grey_bg"
+            android:drawableLeft="@drawable/btn_share"
             android:paddingLeft="10.0dip"
             android:paddingRight="10.0dip"
-            android:background="@drawable/btn_grey_bg"
             android:text="分享"
-            android:drawableLeft="@drawable/btn_share"
             android:textColor="@color/txt_zan_color"
-            android:textSize="12.0sp" />/>
+            android:textSize="12.0sp" />
     </RelativeLayout>
-	
+
+    <RelativeLayout
+        android:id="@+id/zanAllContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="34.0dip"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:id="@+id/zansContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="36.0dip"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/txtZansNum"
+            android:layout_width="wrap_content"
+            android:layout_height="28.0dip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="0.0dip"
+            android:layout_toRightOf="@+id/zansContainer"
+            android:background="@drawable/btn_grey_bg"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="10"
+            android:textColor="#ff999999"
+            android:textSize="12.0sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txtComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:text="评论列表"
+        android:textColor="@color/txt_show_comment_color"
+        android:textSize="12.0sp" />
+
+    <ListView
+        android:id="@+id/commentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </ListView>
+
 </LinearLayout>

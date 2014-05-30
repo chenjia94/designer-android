@@ -8,6 +8,7 @@
         android:layout_width="37.0dip"
         android:layout_height="37.0dip"
         android:background="#ffeeeeee"
+        android:src="@drawable/default_avatar"
         android:padding="1.0px" />
 
     <!-- 

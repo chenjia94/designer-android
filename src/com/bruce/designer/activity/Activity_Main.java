@@ -164,7 +164,7 @@ public class Activity_Main extends BaseActivity {
 				View albumItemView = null;
 				
 				if(style==1){//grid mode
-					albumItemView = LayoutInflater.from(context).inflate(R.layout.item_album_view2, null);
+					albumItemView = LayoutInflater.from(context).inflate(R.layout.item_album_info_view, null);
 					
 					GridView gridView = (GridView) albumItemView.findViewById(R.id.grid);
 					gridView.setAdapter(new GridAdapter(context));
