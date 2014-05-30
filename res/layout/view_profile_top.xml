@@ -161,19 +161,37 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/btnFollow"
-            android:layout_width="fill_parent"
-            android:layout_height="50.0dip"
+        <LinearLayout 
+            android:layout_width="wrap_content"
+            android:layout_height="32.0dip"
+            android:orientation="horizontal"
             android:layout_alignBottom="@+id/avatar"
             android:layout_alignLeft="@+id/linearLayout"
-            android:layout_alignParentRight="true"
             android:layout_alignStart="@+id/linearLayout"
+            >
+            
+            <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="wrap_content"
+            android:layout_height="32.0dip"
             android:background="@drawable/follow_button_bg"
             android:text="关注"
             android:textColor="@color/txt_button_color"
             android:textSize="16.0sp" />
-
+        
+        <Button
+            android:id="@+id/btnSendMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="32.0dip"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/follow_button_bg"
+            android:text="私信"
+            android:textColor="@color/txt_button_color"
+            android:textSize="16.0sp"
+            />
+		
+        
+        <!-- 
         <Button
             android:id="@+id/btnEditProfile"
             android:layout_width="223.0dip"
@@ -187,8 +205,14 @@
             android:textColor="#ff252525"
             android:textSize="16.0sp"
             android:visibility="gone" />
+             -->
+            
+        </LinearLayout>
+        
+        
     </RelativeLayout>
 
+    <!-- 
     <TextView
         android:id="@+id/txtDesc"
         android:layout_width="fill_parent"
@@ -198,7 +222,7 @@
         android:paddingRight="10.0dip"
         android:text="个人资料描述"
         android:textColor="#ff252525" />
-
+ -->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1.0dip"
@@ -229,7 +253,29 @@
             android:layout_weight="1.0"
             android:background="#00000000"
             android:src="@drawable/tab_icon_expand" />
-
+        
     </LinearLayout>
-
+    
+	<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1.0dip"
+        android:background="#ffeeeeee" />
+	
+	<RelativeLayout
+        android:id="@+id/imgContainer"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white"
+        android:gravity="center">
+        <com.bruce.designer.view.ExpandGridView
+            android:id="@+id/albumSlideImages"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:stretchMode="columnWidth" 
+			android:gravity="center"
+            >
+        </com.bruce.designer.view.ExpandGridView>
+    </RelativeLayout>
+     
 </LinearLayout>
