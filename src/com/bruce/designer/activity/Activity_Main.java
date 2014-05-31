@@ -180,6 +180,7 @@ public class Activity_Main extends BaseActivity {
 					@Override
 					public void onClick(View arg0) {
 						Intent intent = new Intent(context, Activity_UserInfo.class);
+						intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, album.getUserId());
 						context.startActivity(intent);
 					}
 				});
@@ -302,7 +303,7 @@ public class Activity_Main extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getAlbumList(albumTailId);
+				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = tabDataHandler.obtainMessage(tabIndex);
 					message.obj = jsonResult.getData();

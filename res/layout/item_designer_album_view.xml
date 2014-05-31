@@ -56,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10.0dip"
         android:layout_marginRight="10.0dip"
-        android:layout_marginTop="10.0dip" >
+        android:layout_marginTop="10.0dip" 
+        >
 
         <Button
             android:id="@+id/btnZan"

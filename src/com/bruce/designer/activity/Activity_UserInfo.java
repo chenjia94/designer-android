@@ -4,34 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
 
 import com.bruce.designer.R;
 import com.bruce.designer.adapter.AlbumSlidesAdapter;
-import com.bruce.designer.adapter.GridAdapter;
 import com.bruce.designer.constants.ConstantKey;
 import com.bruce.designer.model.Album;
 import com.bruce.designer.model.AlbumSlide;
+import com.bruce.designer.model.User;
 import com.bruce.designer.model.json.JsonResultBean;
 import com.bruce.designer.util.ApiUtil;
-import com.bruce.designer.util.DipUtil;
-import com.bruce.designer.util.LogUtil;
 import com.bruce.designer.util.TimeUtil;
 import com.bruce.designer.util.cache.ImageLoader;
 
@@ -44,8 +38,16 @@ public class Activity_UserInfo extends BaseActivity {
 	private ImageView avatarView;
 	/*设计师名称*/
 	private TextView designerNameView;
+	
+	private View followsView;
+	private View fansView;
+	
+	private TextView followsNumView;
+	private TextView fansNumView;
+	
+	private int userId;
 
-	private AlbumListAdapter listView1Adapter;
+	private AlbumListAdapter albumListAdapter;
 
 	public AlbumSlidesAdapter slideAdapter;
 	
@@ -54,6 +56,10 @@ public class Activity_UserInfo extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_user_info);
 		
+		
+		Intent intent = getIntent();
+		//获取userid
+		userId =  intent.getIntExtra(ConstantKey.BUNDLE_USER_INFO_ID, 0);
 		
 		//init view
 		titlebarView = findViewById(R.id.titlebar_return);
@@ -67,20 +73,39 @@ public class Activity_UserInfo extends BaseActivity {
 		titleView.setText("设计师");
 		
 		avatarView = (ImageView) findViewById(R.id.avatar);
-		ImageLoader.loadImage("http://img.jinwanr.com.cn/staticFile/avatar/default.jpg", avatarView);
+//		ImageLoader.loadImage("http://img.jinwanr.com.cn/staticFile/avatar/default.jpg", avatarView);
 		
 		designerNameView = (TextView) findViewById(R.id.txtUsername);
-		designerNameView.setText("大树珠宝");
 		
-//		GridView gridView = (GridView)findViewById(R.id.albumSlideImages);
-//		slideAdapter = new AlbumSlidesAdapter(context, null);
-//		gridView.setAdapter(slideAdapter);
+		fansView = (View) findViewById(R.id.fansContainer);
+		fansNumView = (TextView) findViewById(R.id.txtFansNum);
+		followsView = (View) findViewById(R.id.followsContainer);
+		followsNumView = (TextView) findViewById(R.id.txtFollowsNum);
+		
+		followsView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(context, Activity_UserFollows.class);
+				intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, userId);
+				context.startActivity(intent);
+			}
+		});
+		fansView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent(context, Activity_UserFans.class);
+				intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, userId);
+				context.startActivity(intent);
+			}
+		});
 		
 		ListView albumListView = (ListView)findViewById(R.id.designerAlbums);
-		listView1Adapter = new AlbumListAdapter(context, null);
-		albumListView.setAdapter(listView1Adapter);
+		albumListAdapter = new AlbumListAdapter(context, null);
+		albumListView.setAdapter(albumListAdapter);
 		
-		//更新数据
+		//获取个人资料详情
+		getUserinfo(userId);
+		//获取个人专辑诶人
 		getAlbums(0);
 	}
 	
@@ -159,15 +184,32 @@ public class Activity_UserInfo extends BaseActivity {
 		return slideList;
 	}
 	
+	private void getUserinfo(final int userId) {
+		//启动线程获取数据
+		Thread thread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Message message;
+				JsonResultBean jsonResult = ApiUtil.getUserinfo(userId);
+				if(jsonResult!=null&&jsonResult.getResult()==1){
+					message = handler.obtainMessage(0);
+					message.obj = jsonResult.getData();
+					message.sendToTarget();
+				}
+			}
+		});
+		thread.start();
+	}
+	
 	private void getAlbums(final int albumTailId) {
 		//启动线程获取数据
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getAlbumList(albumTailId);
+				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
 				if(jsonResult!=null&&jsonResult.getResult()==1){
-					message = albumDataHandler.obtainMessage(0);
+					message = handler.obtainMessage(1);
 					message.obj = jsonResult.getData();
 					message.sendToTarget();
 				}
@@ -177,17 +219,31 @@ public class Activity_UserInfo extends BaseActivity {
 	}
 	
 	
-	private Handler albumDataHandler = new Handler(){
+	private Handler handler = new Handler(){
 		@SuppressWarnings("unchecked")
 		public void handleMessage(Message msg) {
 			switch(msg.what){
 				case 0:
-					Map<String, Object> tab1DataMap = (Map<String, Object>) msg.obj;
-					if(tab1DataMap!=null){
-						List<Album> albumList = (List<Album>) tab1DataMap.get("albumList");
+					Map<String, Object> userinfoDataMap = (Map<String, Object>) msg.obj;
+					if(userinfoDataMap!=null){
+						User userinfo = (User) userinfoDataMap.get("userinfo");
+						int fansCount = (Integer) userinfoDataMap.get("fansCount");
+						int followsCount = (Integer) userinfoDataMap.get("followsCount");
+						if(userinfo!=null&&userinfo.getId()>0){
+//							designerNameView.setText(userinfo.getNickname());
+							titleView.setText(userinfo.getNickname());
+							fansNumView.setText(String.valueOf(fansCount));
+							followsNumView.setText(String.valueOf(followsCount));
+						}
+					}
+					break;
+				case 1:
+					Map<String, Object> albumsDataMap = (Map<String, Object>) msg.obj;
+					if(albumsDataMap!=null){
+						List<Album> albumList = (List<Album>) albumsDataMap.get("albumList");
 						if(albumList!=null&&albumList.size()>0){
-							listView1Adapter.setAlbumList(albumList);
-							listView1Adapter.notifyDataSetChanged();
+							albumListAdapter.setAlbumList(albumList);
+							albumListAdapter.notifyDataSetChanged();
 						}
 					}
 					break;
@@ -196,6 +252,5 @@ public class Activity_UserInfo extends BaseActivity {
 			}
 		}
 	};
-	
 	
 }

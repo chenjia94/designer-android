@@ -38,6 +38,14 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="com.bruce.designer.activity.Activity_UserFollows"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.bruce.designer.activity.Activity_UserFans"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.bruce.designer.activity.login.Activity_Login"
             android:screenOrientation="portrait">
         </activity>

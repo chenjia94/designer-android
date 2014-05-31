@@ -34,7 +34,7 @@
             android:src="@drawable/weibo_v_big"
             android:visibility="invisible" /> -->
 		
-		<RelativeLayout
+		<!-- <RelativeLayout
 		    android:id="@+id/usernameContainer"
 		    android:layout_width="fill_parent"
 		    android:layout_height="40dp"
@@ -56,7 +56,7 @@
             android:textSize="16.0sp"
             android:textStyle="normal" />
 		    
-		    <!-- 
+		    
 		    <Button
             android:id="@+id/btnFollow"
             android:layout_width="60.0dip"
@@ -69,7 +69,7 @@
             android:text="关注"
             android:textColor="#ffffffff"
             android:textSize="12.0sp" />
-             -->
+            
 		</RelativeLayout>
 		
 		<View
@@ -80,15 +80,15 @@
 		    android:layout_alignParentRight="true"
 	        android:layout_alignLeft="@+id/usernameContainer"
 	        android:layout_below="@+id/usernameContainer"
-	    />
+	    /> -->
 		
         <LinearLayout
             android:id="@+id/snsInfoLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignLeft="@+id/usernameContainer"
-            android:layout_below="@+id/usernameContainer"
+             android:layout_marginLeft="116.0dip"
+		    android:layout_marginTop="6.0dip"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -124,7 +124,7 @@
                 android:background="@drawable/btn_grey_bg" />
 
             <LinearLayout
-                android:id="@+id/followFriendsContainer"
+                android:id="@+id/followsContainer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
@@ -155,14 +155,14 @@
                 android:background="@drawable/btn_grey_bg" />
 
             <LinearLayout
-                android:id="@+id/fansFriendsContainer"
+                android:id="@+id/fansContainer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
                 android:orientation="vertical" >
 
                 <TextView
-                    android:id="@+id/txtFollowersNum"
+                    android:id="@+id/txtFansNum"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
@@ -180,41 +180,22 @@
                     android:textSize="12.0sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="1.0dip"
-                android:layout_height="fill_parent"
-                android:background="@drawable/btn_grey_bg" />
-
-           	<LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/txtZansNum"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="0"
-                    android:textColor="#ff252525"
-                    android:textSize="14.0sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="被赞"
-                    android:textColor="#ff999999"
-                    android:textSize="12.0sp" />
-            </LinearLayout>
         </LinearLayout>
-
+		
+        <!-- <View
+			android:id="@+id/split1"
+		    android:layout_width="fill_parent"
+		    android:layout_height="1px"
+		    android:background="@color/grey_button_normal_color" 
+		    android:layout_alignParentRight="true"
+	        android:layout_alignLeft="@+id/usernameContainer"
+	        android:layout_below="@+id/snsInfoLayout"
+	    /> -->
+        
         <LinearLayout 
             android:layout_width="fill_parent"
             android:layout_height="40.0dip"
-            android:layout_alignLeft="@+id/usernameContainer"
+            android:layout_alignLeft="@+id/snsInfoLayout"
             android:layout_below="@+id/snsInfoLayout"
             android:layout_marginTop="6.0dip"
             android:orientation="horizontal"
@@ -288,36 +269,75 @@
         android:text="个人资料描述"
         android:textColor="#ff252525" />
  -->
-    <LinearLayout
+
+	<LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1.0dip"
         android:background="#ffeeeeee" />
-
+	
     <LinearLayout
+        android:id="@+id/tab"
         android:layout_width="fill_parent"
-        android:layout_height="30.0dip"
-        android:layout_marginBottom="3.0dip" >
+        android:layout_height="40.0dip"
+        android:background="@color/white"
+        android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/btnTabThumbnail"
+        <RelativeLayout
+            android:id="@+id/tab_recommend"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1.0"
-            android:background="#00000000"
-            android:src="@drawable/tab_icon_thumbnail" />
+            android:layout_weight="1.0" >
 
-        <LinearLayout
-            android:layout_width="1.0dip"
-            android:layout_height="fill_parent"
-            android:background="#ffeeeeee" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="TA的专辑" />
 
-        <ImageButton
-            android:id="@+id/btnTabExpand"
+            <ImageView
+                android:layout_width="1.0px"
+                android:layout_height="30.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5.0dip"
+                android:background="#ffeeeeee" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tab_latest"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_weight="1.0"
-            android:background="#00000000"
-            android:src="@drawable/tab_icon_expand" />
+            android:layout_weight="1.0" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="TA的资料" />
+
+            <ImageView
+                android:layout_width="1.0px"
+                android:layout_height="30.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5.0dip"
+                android:background="#ffeeeeee" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/tab_myfollow"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.0" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="TA的关注" />
+        </RelativeLayout>
+        
         
     </LinearLayout>
     
