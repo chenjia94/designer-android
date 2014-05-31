@@ -12,14 +12,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper {
-	private static DBHelper dbHelper;
+	
+	private static DBHelper instance;
 	private static int version = 1;
 
 	private Context context;
 	private SQLiteDatabase db;
-
+	
 	public DBHelper(Context context) {
-		super(context, "sqlitedemo", null, version);
+		super(context, "jinwanr.db", null, version);
 		this.context = context;
 	}
 
@@ -38,22 +39,22 @@ public class DBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-
 	}
 
-	public static synchronized void init(Context context) {
-		if (dbHelper == null) {
-			dbHelper = new DBHelper(context);
+	public static synchronized DBHelper getInstance(Context context) {
+		if (instance == null) {
+			instance = new DBHelper(context);
 		}
+		return instance;
 	}
 
-	public static SQLiteDatabase getDB() {
-		return dbHelper.getWritableDatabase();
-	}
-
+//	public SQLiteDatabase getDB() {
+//		return instance.getWritableDatabase();
+//	}
+	
 	private void initDB() throws IOException {
 		AssetManager assetManager = context.getAssets();
-		InputStream inStream = assetManager.open("notice_sql.sql");
+		InputStream inStream = assetManager.open("jinwanr.sql");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				inStream));
 

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,9 +27,11 @@ import com.bruce.designer.R;
 import com.bruce.designer.adapter.GridAdapter;
 import com.bruce.designer.adapter.ViewPagerAdapter;
 import com.bruce.designer.constants.ConstantKey;
+import com.bruce.designer.db.AlbumDB;
 import com.bruce.designer.model.Album;
 import com.bruce.designer.model.json.JsonResultBean;
 import com.bruce.designer.util.ApiUtil;
+import com.bruce.designer.util.LogUtil;
 import com.bruce.designer.util.TimeUtil;
 import com.bruce.designer.util.UiUtil;
 import com.bruce.designer.util.cache.ImageLoader;
@@ -41,7 +44,21 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 public class Activity_Main extends BaseActivity {
 
 	private long lastQuitTime = 0;
-	private int albumTailId = 0;
+	
+	
+	/*tab1中最新一条的albumId*/
+	private int tab1AlbumHeadId = 0;
+	/*tab1中最老一条的albumId*/
+	private int tab1AlbumTailId = 0;
+	/*tab1中最后刷新时间*/
+	private int tab1LastRefreshTime = 0;
+	
+	/*tab2中最新一条的albumId*/
+	private int tab2AlbumHeadId = 0;
+	/*tab2中最老一条的albumId*/
+	private int tab2AlbumTailId = 0;
+	/*tab2中最后刷新时间*/
+	private int tab2LastRefreshTime = 0;
 	
 	private ViewPager viewPager;
 	
@@ -59,11 +76,14 @@ public class Activity_Main extends BaseActivity {
 	private PullToRefreshListView pullToRefreshView1;
 	private PullToRefreshListView pullToRefreshView2;
 	
+	private ImageButton btnRefresh;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
 		
 		tab1View = findViewById(R.id.tab_recommend);
 		tab2View = findViewById(R.id.tab_latest);
@@ -97,7 +117,22 @@ public class Activity_Main extends BaseActivity {
 		listView1 = pullToRefreshView1.getRefreshableView();
 		listView1Adapter = new AlbumListAdapter(context, null, 0);
 		listView1.setAdapter(listView1Adapter);
-		getAlbums(0, 1);
+		
+		//tab1请求db数据
+		List<Album> albumList= AlbumDB.queryAll(context);
+		LogUtil.d("====albumList==="+albumList);
+		if(albumList!=null&&albumList.size()>0){//展示db中数据
+			listView1Adapter.setAlbumList(albumList);
+			listView1Adapter.notifyDataSetChanged();
+			LogUtil.d("====tab1AlbumHeadId==="+tab1AlbumHeadId);
+			tab1AlbumHeadId = albumList.get(0).getId();
+		}
+		
+		if(albumList==null||albumList.size()==0){//需要加载网络数据
+			//tab1请求网络数据
+			getAlbums(tab1AlbumHeadId, 1);
+		}
+		
 		
 		pullToRefreshView2 = (PullToRefreshListView) tabContentView2.findViewById(R.id.pull_refresh_list);
 		pullToRefreshView2.setMode(Mode.BOTH);
@@ -105,14 +140,28 @@ public class Activity_Main extends BaseActivity {
 		listView2 = pullToRefreshView2.getRefreshableView();
 		listView2Adapter = new AlbumListAdapter(context, null, 0);
 		listView2.setAdapter(listView2Adapter);
-		pullToRefreshView2.setRefreshing(true);
-		getAlbums(0, 2);
+		//刷新
+//		pullToRefreshView2.setRefreshing(true);
+		
+		//tab2请求db数据
+		
+		//tab2请求网络数据
+		getAlbums(tab2AlbumHeadId, 2);
 		
 		pagerViews.add(tabContentView1);
 		pagerViews.add(tabContentView2);
 		
 		ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(pagerViews, this);
 		viewPager.setAdapter(viewPagerAdapter);
+		
+		//刷新按钮及点击事件
+		btnRefresh = (ImageButton) findViewById(R.id.btnRefresh);
+		btnRefresh.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				pullToRefreshView1.setRefreshing(true);
+			}
+		});
 	}
 	
 	class AlbumListAdapter extends BaseAdapter {
@@ -247,7 +296,7 @@ public class Activity_Main extends BaseActivity {
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "下拉刷新", Toast.LENGTH_LONG).show();
 			//tab1请求数据
-			getAlbums(0, 1);
+			getAlbums(tab1AlbumHeadId, 1);
 		}
 
 		@Override
@@ -274,7 +323,7 @@ public class Activity_Main extends BaseActivity {
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "下拉刷新", Toast.LENGTH_LONG).show();
 			//tab2请求数据
-			getAlbums(0, 2);
+			getAlbums(tab2AlbumHeadId, 2);
 		}
 
 		@Override
@@ -316,7 +365,6 @@ public class Activity_Main extends BaseActivity {
 		thread.start();
 	}
 	
-	
 	private Handler tabDataHandler = new Handler(){
 		@SuppressWarnings("unchecked")
 		public void handleMessage(Message msg) {
@@ -327,13 +375,15 @@ public class Activity_Main extends BaseActivity {
 						List<Album> albumList = (List<Album>) tab1DataMap.get("albumList");
 						if(albumList!=null&&albumList.size()>0){
 							
+							//save to db
+							AlbumDB.save(context, albumList);
+							
 							List<Album> oldAlbumList = listView1Adapter.getAlbumList();
 							if(oldAlbumList==null){
 								oldAlbumList = new ArrayList<Album>();
 							}
 							oldAlbumList.addAll(0, albumList);
 							listView1Adapter.setAlbumList(oldAlbumList);
-							
 							listView1Adapter.notifyDataSetChanged();
 						}
 					}

@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="140.0dip"
         android:src="@drawable/icon_nice_big" />
-	-->
+	
 	
 	 <ImageView
         android:layout_width="fill_parent"
@@ -20,15 +20,16 @@
         android:contentDescription="bg"
         android:scaleType="centerCrop"
         android:src="@drawable/bmp_splash_bg" />
+        -->
 
     <ImageView
         android:id="@+id/imgLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="160.0dip"
-        android:src="@drawable/logo_nice_splash" />
+        android:layout_marginTop="96.0dip"
+        android:src="@drawable/logo_splash" />
 
 
 </RelativeLayout>
