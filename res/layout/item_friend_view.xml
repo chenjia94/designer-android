@@ -34,10 +34,10 @@
             android:textSize="16.0sp" />
 
         <Button
-            android:id="@id/btnFollow"
+            android:id="@+id/btnFollow"
             android:layout_width="60.0dip"
             android:layout_height="28.0dip"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/btnSendMsg"
             android:layout_marginRight="10.0dip"
             android:layout_marginTop="20.0dip"
             android:background="@drawable/follow_button_bg"
@@ -47,7 +47,7 @@
             android:visibility="visible" />
 
         <Button
-            android:id="@id/btnFollowed"
+            android:id="@+id/btnUnfollow"
             android:layout_width="60.0dip"
             android:layout_height="28.0dip"
             android:layout_alignParentRight="true"
@@ -58,6 +58,20 @@
             android:textColor="#ff999999"
             android:textSize="12.0sp"
             android:visibility="gone" />
+        
+        <Button
+            android:id="@+id/btnSendMsg"
+            android:layout_width="60.0dip"
+            android:layout_height="28.0dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10.0dip"
+            android:layout_marginTop="20.0dip"
+            android:background="@drawable/sendmsg_button_bg" 
+            android:text="私信"
+            android:textColor="#ffffffff"
+            android:textSize="12.0sp"
+            android:visibility="visible" />
+        
     </RelativeLayout>
 
 </LinearLayout>

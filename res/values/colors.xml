@@ -42,6 +42,8 @@
     <color name="filter_button_normal_color">#ff252525</color>
     <color name="follow_button_active_color">#ff229147</color>
     <color name="follow_button_normal_color">#ff2bb458</color>
+    <color name="sendmsg_button_active_color">#fff06522</color>
+    <color name="sendmsg_button_normal_color">#fff26522</color>
     <color name="grey_button_active_color">#ffd9d9d9</color>
     <color name="grey_button_normal_color">#fff2f2f2</color>
     <color name="history_active_color">#ff000000</color>
