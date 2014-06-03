@@ -35,16 +35,16 @@ import com.bruce.designer.util.LogUtil;
 import com.bruce.designer.util.TimeUtil;
 import com.bruce.designer.util.UiUtil;
 import com.bruce.designer.util.cache.ImageLoader;
-import com.bruce.designer.view.RoundImageView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class Activity_Main extends BaseActivity {
 
 	private long lastQuitTime = 0;
 	
+	private int currentTab = 1;
 	
 	/*tab1中最新一条的albumId*/
 	private int tab1AlbumHeadId = 0;
@@ -84,24 +84,36 @@ public class Activity_Main extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		
 		tab1View = findViewById(R.id.tab_recommend);
 		tab2View = findViewById(R.id.tab_latest);
 		tab3View = findViewById(R.id.tab_myfollow);
 		
-		View[] tabViews = new View[]{tab1View, tab2View, tab3View};
-		for(int i=0;i<tabViews.length;i++){
-			final int index = i;
-			View clickedTab = tabViews[i];
-			if(clickedTab!=null){
-				clickedTab.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						viewPager.setCurrentItem(index);
-					}
-				});
+		//响应事件
+		tab1View.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				currentTab = 1;
+				viewPager.setCurrentItem(0);
+				UiUtil.showShortToast(context, ""+currentTab);
 			}
-		}
+		});
+		tab2View.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				currentTab = 2;
+				viewPager.setCurrentItem(1);
+				UiUtil.showShortToast(context, ""+currentTab);
+			}
+		});
+		tab3View.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				currentTab = 3;
+				viewPager.setCurrentItem(2);
+				UiUtil.showShortToast(context, ""+currentTab);
+			}
+		});
+		
 		
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		
@@ -124,15 +136,14 @@ public class Activity_Main extends BaseActivity {
 		if(albumList!=null&&albumList.size()>0){//展示db中数据
 			listView1Adapter.setAlbumList(albumList);
 			listView1Adapter.notifyDataSetChanged();
-			LogUtil.d("====tab1AlbumHeadId==="+tab1AlbumHeadId);
 			tab1AlbumHeadId = albumList.get(0).getId();
+			tab1AlbumTailId = albumList.get(albumList.size()-1).getId();
 		}
 		
 		if(albumList==null||albumList.size()==0){//需要加载网络数据
 			//tab1请求网络数据
 			getAlbums(tab1AlbumHeadId, 1);
 		}
-		
 		
 		pullToRefreshView2 = (PullToRefreshListView) tabContentView2.findViewById(R.id.pull_refresh_list);
 		pullToRefreshView2.setMode(Mode.BOTH);
@@ -159,8 +170,15 @@ public class Activity_Main extends BaseActivity {
 		btnRefresh.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				pullToRefreshView1.setRefreshing(true);
-			}
+				switch(currentTab){
+					case 1:
+						pullToRefreshView1.setRefreshing(true);
+						break;
+					case 2:
+						pullToRefreshView2.setRefreshing(true);
+						break;
+				}
+			}	
 		});
 	}
 	
@@ -288,33 +306,20 @@ public class Activity_Main extends BaseActivity {
 		}
 		return flag;
 	}
-	
-
 
 	OnRefreshListener2<ListView> tab1RefreshListener = new OnRefreshListener2<ListView>() {
 		@Override
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "下拉刷新", Toast.LENGTH_LONG).show();
-			//tab1请求数据
+			//tab1请求新数据
 			getAlbums(tab1AlbumHeadId, 1);
 		}
 
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "上拉获取更多", Toast.LENGTH_LONG).show();
-			//TODO 启动线程获取数据
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					tabDataHandler.obtainMessage(1).sendToTarget();
-				}
-			});
-			thread.start();
+			//tab1请求历史数据
+			getAlbums(tab1AlbumTailId, 1);
 		}
 	};
 	
@@ -329,19 +334,8 @@ public class Activity_Main extends BaseActivity {
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "上拉获取更多", Toast.LENGTH_LONG).show();
-			//TODO 启动线程获取数据
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					tabDataHandler.obtainMessage(2).sendToTarget();
-				}
-			});
-			thread.start();
+			//tab1请求历史数据
+			getAlbums(tab2AlbumTailId, 2);
 		}
 	};
 	
@@ -356,7 +350,7 @@ public class Activity_Main extends BaseActivity {
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = tabDataHandler.obtainMessage(tabIndex);
 					message.obj = jsonResult.getData();
-					message.sendToTarget();
+					message.sendToTarget(); 
 				}else{//发送失败消息
 					tabDataHandler.obtainMessage(0).sendToTarget();
 				}
