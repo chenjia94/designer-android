@@ -41,7 +41,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener2;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class Activity_Main extends BaseActivity {
-
+	
+	private static final int HANDLER_FLAG_ERROR = 0;
+	private static final int HANDLER_FLAG_TAB1 = 1;
+	private static final int HANDLER_FLAG_TAB2 = 2;
+	
 	private long lastQuitTime = 0;
 	
 	private int currentTab = 1;
@@ -142,7 +146,7 @@ public class Activity_Main extends BaseActivity {
 		
 		if(albumList==null||albumList.size()==0){//需要加载网络数据
 			//tab1请求网络数据
-			getAlbums(tab1AlbumHeadId, 1);
+			getAlbums(tab1AlbumHeadId, HANDLER_FLAG_TAB1);
 		}
 		
 		pullToRefreshView2 = (PullToRefreshListView) tabContentView2.findViewById(R.id.pull_refresh_list);
@@ -157,7 +161,7 @@ public class Activity_Main extends BaseActivity {
 		//tab2请求db数据
 		
 		//tab2请求网络数据
-		getAlbums(tab2AlbumHeadId, 2);
+		getAlbums(tab2AlbumHeadId, HANDLER_FLAG_TAB2);
 		
 		pagerViews.add(tabContentView1);
 		pagerViews.add(tabContentView2);
@@ -312,14 +316,14 @@ public class Activity_Main extends BaseActivity {
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "下拉刷新", Toast.LENGTH_LONG).show();
 			//tab1请求新数据
-			getAlbums(tab1AlbumHeadId, 1);
+			getAlbums(tab1AlbumHeadId, HANDLER_FLAG_TAB1);
 		}
 
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "上拉获取更多", Toast.LENGTH_LONG).show();
 			//tab1请求历史数据
-			getAlbums(tab1AlbumTailId, 1);
+			getAlbums(tab1AlbumTailId, HANDLER_FLAG_TAB1);
 		}
 	};
 	
@@ -328,14 +332,14 @@ public class Activity_Main extends BaseActivity {
 		public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "下拉刷新", Toast.LENGTH_LONG).show();
 			//tab2请求数据
-			getAlbums(tab2AlbumHeadId, 2);
+			getAlbums(tab2AlbumHeadId, HANDLER_FLAG_TAB2);
 		}
 
 		@Override
 		public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 			Toast.makeText(getApplicationContext(), "上拉获取更多", Toast.LENGTH_LONG).show();
 			//tab1请求历史数据
-			getAlbums(tab2AlbumTailId, 2);
+			getAlbums(tab2AlbumTailId, HANDLER_FLAG_TAB2);
 		}
 	};
 	
@@ -352,7 +356,7 @@ public class Activity_Main extends BaseActivity {
 					message.obj = jsonResult.getData();
 					message.sendToTarget(); 
 				}else{//发送失败消息
-					tabDataHandler.obtainMessage(0).sendToTarget();
+					tabDataHandler.obtainMessage(HANDLER_FLAG_ERROR).sendToTarget();
 				}
 			}
 		});
@@ -363,7 +367,7 @@ public class Activity_Main extends BaseActivity {
 		@SuppressWarnings("unchecked")
 		public void handleMessage(Message msg) {
 			switch(msg.what){
-				case 1:
+				case HANDLER_FLAG_TAB1:
 					Map<String, Object> tab1DataMap = (Map<String, Object>) msg.obj;
 					if(tab1DataMap!=null){
 						List<Album> albumList = (List<Album>) tab1DataMap.get("albumList");
@@ -383,7 +387,7 @@ public class Activity_Main extends BaseActivity {
 					}
 					pullToRefreshView1.onRefreshComplete();
 					break;
-				case 2:
+				case HANDLER_FLAG_TAB2:
 					Map<String, Object> tab2DataMap = (Map<String, Object>) msg.obj;
 					if(tab2DataMap!=null){
 						List<Album> albumList = (List<Album>) tab2DataMap.get("albumList");

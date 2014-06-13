@@ -22,7 +22,6 @@ public class ApiUtil {
 	 * @param albumTailId
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static JsonResultBean getAlbumList(int designerId, int albumTailId){
 		
 		String albumListUrl = Config.JINWAN_API_ALBUMS + "?designerId="+designerId+"&albumsTailId="+albumTailId;
@@ -223,7 +222,6 @@ public class ApiUtil {
 	 * @param commentsTailId
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static JsonResultBean getUserFans(int userId){
 		String userFansUrl = Config.JINWAN_API_PREFIX+"/"+userId+"/fans.json";
 		
@@ -256,6 +254,82 @@ public class ApiUtil {
 		return null;
 	}
 	
+	
+	/**
+	 * 微博登录（通常在用户首次进入，或session失效时会进入）
+	 * @param uid
+	 * @param accessToken
+	 * @param thirdpartyType
+	 * @return
+	 */
+	public static JsonResultBean wbLogin(int uid, String accessToken, int thirdpartyType){
+		String wbLoginUrl = Config.JINWAN_API_PREFIX+"/wbLogin.json";
+		
+		String wbLoginJsonResult = null;
+		JsonResultBean jsonResult = null;
+		try {
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("uid", String.valueOf(uid));
+			dataMap.put("accessToken", String.valueOf(accessToken));
+			dataMap.put("thirdpartyType", String.valueOf(thirdpartyType));
+			
+			wbLoginJsonResult = HttpClientUtils.httpPost(wbLoginUrl, dataMap);
+			JSONObject jsonObject = new JSONObject(wbLoginJsonResult);
+			int result = jsonObject.getInt("result");
+			if(result==1){//成功响应
+				JSONObject jsonData = jsonObject.getJSONObject("data");
+				
+				
+			}else{//错误响应
+				int errorcode = jsonObject.getInt("errorcode");
+				String message = jsonObject.getString("message");
+				jsonResult = new JsonResultBean(result, null, errorcode, message);
+			}
+			return jsonResult;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		LogUtil.d("=====wbLoginJsonResult======"+wbLoginJsonResult);
+		return null;
+	}
+	
+	/**
+	 * 新用户注册（用户oauth成功后的数据提交）
+	 * @param username
+	 * @param nickname
+	 * @param password
+	 * @return
+	 */
+	public static JsonResultBean register(String username, String nickname, String password){
+		String registerUrl = Config.JINWAN_API_PREFIX+"/register.json";
+		
+		String registerJsonResult = null;
+		JsonResultBean jsonResult = null;
+		try {
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("username", username);
+			dataMap.put("nickname", nickname);
+			dataMap.put("password", password);
+			
+			registerJsonResult = HttpClientUtils.httpPost(registerUrl, dataMap);
+			JSONObject jsonObject = new JSONObject(registerJsonResult);
+			int result = jsonObject.getInt("result");
+			if(result==1){//成功响应
+				JSONObject jsonData = jsonObject.getJSONObject("data");
+				//注册成功，理应返回类似secret等数据，维持用户id
+				
+			}else{//错误响应
+				int errorcode = jsonObject.getInt("errorcode");
+				String message = jsonObject.getString("message");
+				jsonResult = new JsonResultBean(result, null, errorcode, message);
+			}
+			return jsonResult;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		LogUtil.d("=====registerJsonResult======"+registerJsonResult);
+		return null;
+	}
 	
 	
 //	@SuppressWarnings("unchecked")

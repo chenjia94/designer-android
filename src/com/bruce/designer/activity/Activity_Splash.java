@@ -19,7 +19,7 @@ public class Activity_Splash extends BaseActivity{
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message message) {
-			Intent intent = new Intent(context, Activity_Main.class);
+			Intent intent = new Intent(context, Activity_Login.class);
 			startActivity(intent);
 			finish();
 		};
@@ -57,9 +57,13 @@ public class Activity_Splash extends BaseActivity{
 //			}
 //		});
 	}
-
+	
+	
+	/**
+	 * 禁止使用退出键
+	 */
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		boolean flag = false;
 		return flag;
 	}
