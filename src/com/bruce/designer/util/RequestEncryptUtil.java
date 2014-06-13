@@ -1,6 +1,5 @@
 package com.bruce.designer.util;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +15,6 @@ import java.util.Map;
  */
 public class RequestEncryptUtil {
 
-	
 	/**
      * 根据反馈回来的信息，生成签名结果
      * @param Params 通知返回来的参数数组
@@ -24,12 +22,12 @@ public class RequestEncryptUtil {
      * @return 生成的签名结果
 	 * @throws NoSuchAlgorithmException 
      */
-	private static String requestSign(Map<String, String> requestMap, String key) throws NoSuchAlgorithmException {
+	public static String getSign(Map<String, String> requestMap, String secret) throws NoSuchAlgorithmException {
     	//过滤空值、sign与sign_type参数
     	Map<String, String> sParaNew = paraFilter(requestMap);
         //获取待签名字符串
         String preSignStr = createLinkString(sParaNew);
-        preSignStr = preSignStr + key;
+        preSignStr = preSignStr + secret;
         //获得签名验证结果
         String mySign = MD5.md5Encrypt(preSignStr);
         return mySign;
