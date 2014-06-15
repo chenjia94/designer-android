@@ -3,9 +3,11 @@ package com.bruce.designer.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.json.JSONObject;
 
+import com.bruce.designer.api.API;
 import com.bruce.designer.constants.Config;
 import com.bruce.designer.model.Album;
 import com.bruce.designer.model.Comment;
@@ -22,14 +24,20 @@ public class ApiUtil {
 	 * @param albumTailId
 	 * @return
 	 */
-	public static JsonResultBean getAlbumList(int designerId, int albumTailId){
+	public static JsonResultBean getAlbumList(int designerId, int albumsTailId){
 		
-		String albumListUrl = Config.JINWAN_API_ALBUMS + "?designerId="+designerId+"&albumsTailId="+albumTailId;
+		String albumListUrl = Config.JINWAN_API_ALBUMS;// + "?designerId="+designerId+"&albumsTailId="+albumTailId;
 		LogUtil.d("=====albumListUrl======"+albumListUrl);
 		String albumListJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			albumListJsonResult = HttpClientUtils.httpGet(albumListUrl);
+			TreeMap<String, String> paramMap = new TreeMap<String, String>();
+			paramMap.put("designerId", String.valueOf(designerId));
+			paramMap.put("albumsTailId", String.valueOf(albumsTailId));
+			
+			//albumListJsonResult = API.httpGet(albumListUrl, paramMap);
+			albumListJsonResult = API.httpGet(albumListUrl, paramMap);
+			
 			JSONObject jsonObject = new JSONObject(albumListJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -69,7 +77,10 @@ public class ApiUtil {
 		String albumInfoJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			albumInfoJsonResult = HttpClientUtils.httpGet(albumInfoUrl);
+			TreeMap<String, String> paramMap = new TreeMap<String, String>();
+			paramMap.put("albumId", String.valueOf(albumId));
+			
+			albumInfoJsonResult = API.httpGet(albumInfoUrl, paramMap);
 			JSONObject jsonObject = new JSONObject(albumInfoJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -100,13 +111,17 @@ public class ApiUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static JsonResultBean getAlbumComments(int albumId, int commentsTailId){
-		String albumCommentsUrl = Config.JINWAN_API_PREFIX+"/moreComments.json?albumId="+albumId+"&commentsTailId="+commentsTailId;
+		String albumCommentsUrl = Config.JINWAN_API_PREFIX+"/moreComments.json";//?albumId="+albumId+"&commentsTailId="+commentsTailId;
 		
 		LogUtil.d("=====albumCommentsUrl======"+albumCommentsUrl);
 		String albumCommentsJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			albumCommentsJsonResult = HttpClientUtils.httpGet(albumCommentsUrl);
+			TreeMap<String, String> paramMap = new TreeMap<String, String>();
+			paramMap.put("albumId", String.valueOf(albumId));
+			paramMap.put("commentsTailId", String.valueOf(commentsTailId));
+			
+			albumCommentsJsonResult = API.httpGet(albumCommentsUrl, paramMap);
 			JSONObject jsonObject = new JSONObject(albumCommentsJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -146,7 +161,7 @@ public class ApiUtil {
 		String userinfoJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			userinfoJsonResult = HttpClientUtils.httpGet(userinfoUrl);
+			userinfoJsonResult = API.httpGet(userinfoUrl, null);
 			JSONObject jsonObject = new JSONObject(userinfoJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -191,7 +206,8 @@ public class ApiUtil {
 		String userFollowsJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			userFollowsJsonResult = HttpClientUtils.httpGet(userFollowsUrl);
+			
+			userFollowsJsonResult = API.httpGet(userFollowsUrl);
 			JSONObject jsonObject = new JSONObject(userFollowsJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -229,7 +245,7 @@ public class ApiUtil {
 		String userFansJsonResult = null;
 		JsonResultBean jsonResult = null;
 		try {
-			userFansJsonResult = HttpClientUtils.httpGet(userFansUrl);
+			userFansJsonResult = API.httpGet(userFansUrl);
 			JSONObject jsonObject = new JSONObject(userFansJsonResult);
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
@@ -262,7 +278,7 @@ public class ApiUtil {
 	 * @param thirdpartyType
 	 * @return
 	 */
-	public static JsonResultBean wbLogin(int uid, String accessToken, int thirdpartyType){
+	public static JsonResultBean wbLogin(String uid, String accessToken, int thirdpartyType){
 		String wbLoginUrl = Config.JINWAN_API_PREFIX+"/wbLogin.json";
 		
 		String wbLoginJsonResult = null;
@@ -278,7 +294,6 @@ public class ApiUtil {
 			int result = jsonObject.getInt("result");
 			if(result==1){//成功响应
 				JSONObject jsonData = jsonObject.getJSONObject("data");
-				
 				
 			}else{//错误响应
 				int errorcode = jsonObject.getInt("errorcode");
@@ -339,7 +354,7 @@ public class ApiUtil {
 //		LogUtil.d("=====albumListUrl======"+albumListUrl);
 //		String albumListJsonResult = null;
 //		try {
-//			albumListJsonResult = HttpClientUtils.httpGet(albumListUrl);
+//			albumListJsonResult = API.httpGet(albumListUrl);
 //			AlbumsResultWrapper albumsResult = JsonUtil.gson.fromJson(albumListJsonResult, AlbumsResultWrapper.class);
 //			if(albumsResult!=null&&albumsResult.getResult()==1){
 //				Map<String, Object> dataMap = (Map<String, Object>) albumsResult.getData();

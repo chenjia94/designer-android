@@ -80,13 +80,17 @@ public class Activity_Login extends BaseActivity{
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
             if (mAccessToken.isSessionValid()) {
+            	String uid = mAccessToken.getUid();
+            	String accessToken = mAccessToken.getToken();
+            	short thirdpartyTypeWb = 1;
+            	
             	LogUtil.d("=============="+mAccessToken.getUid()+"========"+ mAccessToken.getToken());
                 // 显示 Token
             	Toast.makeText(context,  mAccessToken.getUid()+"========"+ mAccessToken.getToken(), Toast.LENGTH_LONG).show();
                 Toast.makeText(context, R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();
                 
                 //TODO 向服务器提交token
-                
+                wbLogin(uid, accessToken, thirdpartyTypeWb);
               
             } else {
                 // 以下几种情况，您会收到 Code：
@@ -134,19 +138,20 @@ public class Activity_Login extends BaseActivity{
      * @param accessToken
      * @param thirdpartyType
      */
-    private void loginByAccessToken(String accessToken, int thirdpartyType) {
+    private void wbLogin(final String uid, final String accessToken, final int thirdpartyType) {
 		//启动线程获取用户数据
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = null;//ApiUtil.getAlbumList(0, albumTailId);
+				JsonResultBean jsonResult = ApiUtil.wbLogin(uid, accessToken, thirdpartyType);
 				if(jsonResult!=null&&jsonResult.getResult()==1){
-					message = loginHandler.obtainMessage(HANDLER_FLAG_WB_LOGIN_SUCCESS);
+					message = loginHandler.obtainMessage(HANDLER_FLAG_WB_LOGIN_SUCCESS);//可以直接登录
 					message.obj = jsonResult.getData();
 					message.sendToTarget();
 				}else{//发送失败消息
 					loginHandler.obtainMessage(HANDLER_FLAG_ERROR).sendToTarget();
+					//两种情况，1、需要注册或绑定； 2、accessToken登录失败
 				}
 			}
 		});

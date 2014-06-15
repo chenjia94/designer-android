@@ -24,12 +24,12 @@ public class RequestEncryptUtil {
      */
 	public static String getSign(Map<String, String> requestMap, String secret) throws NoSuchAlgorithmException {
     	//过滤空值、sign与sign_type参数
-    	Map<String, String> sParaNew = paraFilter(requestMap);
+    	Map<String, String> sParaNew = paramFilter(requestMap);
         //获取待签名字符串
         String preSignStr = createLinkString(sParaNew);
         preSignStr = preSignStr + secret;
         //获得签名验证结果
-        String mySign = MD5.md5Encrypt(preSignStr);
+        String mySign = MD5.toMD5(preSignStr);
         return mySign;
     }
 	
@@ -39,7 +39,7 @@ public class RequestEncryptUtil {
 	 * @param paramMap 签名参数组
 	 * @return 去掉空值与签名参数后的新签名参数组
 	 */
-	private static Map<String, String> paraFilter(Map<String, String> paramMap) {
+	private static Map<String, String> paramFilter(Map<String, String> paramMap) {
 
 		Map<String, String> result = new HashMap<String, String>();
 		if (paramMap == null || paramMap.size() <= 0) {

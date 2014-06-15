@@ -1,7 +1,6 @@
 package com.bruce.designer.util;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -26,11 +25,32 @@ import org.apache.http.util.EntityUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-
 public class HttpClientUtils {
 
-	public static String httpGet(String url) throws Exception {
-
+	/**
+	 * http get请求
+	 * 
+	 * @param url
+	 * @param paramMap
+	 * @return
+	 * @throws Exception
+	 */
+	public static String httpGet(String url, Map<String, String> paramMap)
+			throws Exception {
+		StringBuilder sb = null;
+		if (paramMap != null && paramMap.size() > 0) {
+			sb = new StringBuilder();
+			for (Entry<String, String> entry : paramMap.entrySet()) {
+				String key = entry.getKey();
+				String value = entry.getValue();
+				sb.append("&");
+				sb.append(key + "=" + value);
+			}
+		}
+		if (sb != null && !"".equals(sb.toString())) {
+			url = url + sb.replace(0, 1, "?");
+		}
+		LogUtil.v("========url======" + url);
 		HttpGet httpGet = new HttpGet(url);
 		HttpClient client = new DefaultHttpClient();
 		HttpResponse response = client.execute(httpGet);
@@ -43,25 +63,22 @@ public class HttpClientUtils {
 	}
 
 	/**
-	 * httpPost
+	 * httpPost 请求
 	 * 
 	 * @param url
-	 * @param dataMap
+	 * @param paramMap
 	 * @return
 	 * @throws Exception
 	 */
-	public static String httpPost(String url, Map<String, String> dataMap)
+	public static String httpPost(String url, Map<String, String> paramMap)
 			throws Exception {
-
 		HttpPost httpPost = new HttpPost(url);
-
 		HttpClient client = new DefaultHttpClient();
-
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		if (dataMap != null && dataMap.size() > 0) {
-			for (Entry<String, String> set : dataMap.entrySet()) {
+		if (paramMap != null && paramMap.size() > 0) {
+			for (Entry<String, String> set : paramMap.entrySet()) {
 				String key = set.getKey();
-				String value = dataMap.get(set.getKey());
+				String value = paramMap.get(set.getKey());
 				params.add(new BasicNameValuePair(key, value));
 			}
 		}
@@ -104,10 +121,9 @@ public class HttpClientUtils {
 		return null;
 	}
 
-	
-	
 	/**
 	 * 获取bitmap
+	 * 
 	 * @param imageUrl
 	 * @return
 	 */
@@ -131,6 +147,5 @@ public class HttpClientUtils {
 		}
 		return null;
 	}
-	
-	
+
 }
