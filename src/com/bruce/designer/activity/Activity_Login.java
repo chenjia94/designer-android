@@ -11,11 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bruce.designer.AppApplication;
 import com.bruce.designer.R;
+import com.bruce.designer.api.ApiWrapper;
+import com.bruce.designer.api.account.WeiboLoginApi;
+import com.bruce.designer.constants.Config;
 import com.bruce.designer.constants.ConstantOAuth;
+import com.bruce.designer.model.UserPassport;
 import com.bruce.designer.model.json.JsonResultBean;
-import com.bruce.designer.util.ApiUtil;
 import com.bruce.designer.util.LogUtil;
+import com.bruce.designer.util.SharedPreferenceUtil;
+import com.bruce.designer.util.UiUtil;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -33,7 +39,6 @@ public class Activity_Login extends BaseActivity{
 	private Context context;
 	private SsoHandler mSsoHandler; 
 	private Oauth2AccessToken mAccessToken;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +95,7 @@ public class Activity_Login extends BaseActivity{
                 Toast.makeText(context, R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();
                 
                 //TODO 向服务器提交token
-                wbLogin(uid, accessToken, thirdpartyTypeWb);
+                weiboLogin(uid, accessToken, new WeiboLoginListener());
               
             } else {
                 // 以下几种情况，您会收到 Code：
@@ -138,47 +143,66 @@ public class Activity_Login extends BaseActivity{
      * @param accessToken
      * @param thirdpartyType
      */
-    private void wbLogin(final String uid, final String accessToken, final int thirdpartyType) {
+    private void weiboLogin(final String uid, final String accessToken, final OAuthLoginListener oAuthLoginListener) {
 		//启动线程获取用户数据
-		Thread thread = new Thread(new Runnable() {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Message message;
-				JsonResultBean jsonResult = ApiUtil.wbLogin(uid, accessToken, thirdpartyType);
+				WeiboLoginApi api = new WeiboLoginApi(uid, accessToken);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
 				if(jsonResult!=null&&jsonResult.getResult()==1){
-					message = loginHandler.obtainMessage(HANDLER_FLAG_WB_LOGIN_SUCCESS);//可以直接登录
-					message.obj = jsonResult.getData();
-					message.sendToTarget();
+					//weibo登录成功，两种情况
+					boolean result = true;
+					if(result){//直接返回用户ticket信息
+						UserPassport userPassport = new UserPassport(1, "asdfghjkl", "");
+						oAuthLoginListener.loginComplete(userPassport);
+					}else{//第一次登录，需要完善用户资料
+						oAuthLoginListener.needComplete();
+					}
 				}else{//发送失败消息
-					loginHandler.obtainMessage(HANDLER_FLAG_ERROR).sendToTarget();
-					//两种情况，1、需要注册或绑定； 2、accessToken登录失败
+					oAuthLoginListener.loginFailed();
 				}
 			}
-		});
-		thread.start();
+		}).start();
 	}
     
     
-    private Handler loginHandler = new Handler(){
-		@SuppressWarnings("unchecked")
-		public void handleMessage(Message msg) {
-			switch(msg.what){
-				case HANDLER_FLAG_WB_LOGIN_SUCCESS:
-					//1、直接登录进入
-					
-					//2、需要绑定账户
-					
-					break;
-				case HANDLER_FLAG_WB_LOGIN_FAILED:
-					
-					break;
-				default:
-					break;
-			}
-		};
-	};
+//    private Handler loginHandler = new Handler(){
+//		@SuppressWarnings("unchecked")
+//		public void handleMessage(Message msg) {
+//			switch(msg.what){
+//				case HANDLER_FLAG_WB_LOGIN_SUCCESS:
+//					//1、直接登录进入
+//					
+//					//2、需要绑定账户
+//					
+//					break;
+//				case HANDLER_FLAG_WB_LOGIN_FAILED:
+//					
+//					break;
+//				default:
+//					break;
+//			}
+//		};
+//	};
     
-    
+    class WeiboLoginListener implements OAuthLoginListener{
+		@Override
+		public void loginComplete(UserPassport userPassport) {
+			UiUtil.showShortToast(context, "登录成功");
+//			SharedPreferenceUtil.writeObjectToSp(userPassport, Config.SP_CONFIG_ACCOUNT, Config.SP_KEY_USERPASSPORT);
+		}
+		@Override
+		public void needComplete() {
+			UiUtil.showShortToast(context, "登录成功，需要完善个人资料");
+		}
+
+		@Override
+		public void loginFailed() {
+			UiUtil.showShortToast(context, "登录失败");
+		}
+    	
+    }
     
     
     

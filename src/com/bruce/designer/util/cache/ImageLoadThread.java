@@ -2,7 +2,7 @@ package com.bruce.designer.util.cache;
 
 import java.lang.ref.SoftReference;
 
-import com.bruce.designer.util.HttpClientUtils;
+import com.bruce.designer.util.HttpClientUtil;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -21,7 +21,7 @@ public class ImageLoadThread implements Runnable {
 	@Override
 	public void run() {
 //		try {
-		Bitmap bitmap = HttpClientUtils.getNetBitmap(imageUrl);
+		Bitmap bitmap = HttpClientUtil.getNetBitmap(imageUrl);
 		if(bitmap!=null){
 			MemoryCache.getInstance().put(imageUrl, new SoftReference<Bitmap>(bitmap));    
 			Activity activity = (Activity) imageView.getContext();

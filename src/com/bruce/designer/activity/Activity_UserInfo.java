@@ -20,7 +20,11 @@ import android.widget.TextView;
 
 import com.bruce.designer.R;
 import com.bruce.designer.adapter.AlbumSlidesAdapter;
-import com.bruce.designer.constants.ConstantKey;
+import com.bruce.designer.api.ApiWrapper;
+import com.bruce.designer.api.album.AlbumListApi;
+import com.bruce.designer.api.user.UserFansApi;
+import com.bruce.designer.api.user.UserInfoApi;
+import com.bruce.designer.constants.BundleKey;
 import com.bruce.designer.model.Album;
 import com.bruce.designer.model.AlbumSlide;
 import com.bruce.designer.model.User;
@@ -59,7 +63,7 @@ public class Activity_UserInfo extends BaseActivity {
 		
 		Intent intent = getIntent();
 		//获取userid
-		userId =  intent.getIntExtra(ConstantKey.BUNDLE_USER_INFO_ID, 0);
+		userId =  intent.getIntExtra(BundleKey.BUNDLE_USER_INFO_ID, 0);
 		
 		//init view
 		titlebarView = findViewById(R.id.titlebar_return);
@@ -86,7 +90,7 @@ public class Activity_UserInfo extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(context, Activity_UserFollows.class);
-				intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, userId);
+				intent.putExtra(BundleKey.BUNDLE_USER_INFO_ID, userId);
 				context.startActivity(intent);
 			}
 		});
@@ -94,7 +98,7 @@ public class Activity_UserInfo extends BaseActivity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(context, Activity_UserFans.class);
-				intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, userId);
+				intent.putExtra(BundleKey.BUNDLE_USER_INFO_ID, userId);
 				context.startActivity(intent);
 			}
 		});
@@ -190,7 +194,12 @@ public class Activity_UserInfo extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getUserinfo(userId);
+//				JsonResultBean jsonResult = ApiUtil.getUserinfo(userId);
+				
+				UserInfoApi api = new UserInfoApi(userId);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
+				
+				
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = handler.obtainMessage(0);
 					message.obj = jsonResult.getData();
@@ -207,7 +216,11 @@ public class Activity_UserInfo extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
+//				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
+				
+				AlbumListApi api = new AlbumListApi(userId, albumTailId);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
+				
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = handler.obtainMessage(1);
 					message.obj = jsonResult.getData();

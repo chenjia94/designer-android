@@ -26,7 +26,10 @@ import com.bruce.designer.AppManager;
 import com.bruce.designer.R;
 import com.bruce.designer.adapter.GridAdapter;
 import com.bruce.designer.adapter.ViewPagerAdapter;
-import com.bruce.designer.constants.ConstantKey;
+import com.bruce.designer.api.ApiWrapper;
+import com.bruce.designer.api.RequestMethodEnum;
+import com.bruce.designer.api.album.AlbumListApi;
+import com.bruce.designer.constants.BundleKey;
 import com.bruce.designer.db.AlbumDB;
 import com.bruce.designer.model.Album;
 import com.bruce.designer.model.json.JsonResultBean;
@@ -251,7 +254,7 @@ public class Activity_Main extends BaseActivity {
 					@Override
 					public void onClick(View arg0) {
 						Intent intent = new Intent(context, Activity_UserInfo.class);
-						intent.putExtra(ConstantKey.BUNDLE_USER_INFO_ID, album.getUserId());
+						intent.putExtra(BundleKey.BUNDLE_USER_INFO_ID, album.getUserId());
 						context.startActivity(intent);
 					}
 				});
@@ -284,7 +287,7 @@ public class Activity_Main extends BaseActivity {
 					@Override
 					public void onClick(View arg0) {
 						Intent intent = new Intent(context, Activity_AlbumInfo.class);
-						intent.putExtra(ConstantKey.BUNDLE_ALBUM_INFO, album);
+						intent.putExtra(BundleKey.BUNDLE_ALBUM_INFO, album);
 						context.startActivity(intent);
 					}
 				});
@@ -350,7 +353,11 @@ public class Activity_Main extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
+//				JsonResultBean jsonResult = ApiUtil.getAlbumList(0, albumTailId);
+				
+				AlbumListApi api = new AlbumListApi(0, albumTailId);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
+				
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = tabDataHandler.obtainMessage(tabIndex);
 					message.obj = jsonResult.getData();

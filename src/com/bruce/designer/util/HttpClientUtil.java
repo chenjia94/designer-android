@@ -25,7 +25,7 @@ import org.apache.http.util.EntityUtils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-public class HttpClientUtils {
+public class HttpClientUtil {
 
 	/**
 	 * http get请求

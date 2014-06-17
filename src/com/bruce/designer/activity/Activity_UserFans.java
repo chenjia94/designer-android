@@ -16,7 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bruce.designer.R;
-import com.bruce.designer.constants.ConstantKey;
+import com.bruce.designer.api.ApiWrapper;
+import com.bruce.designer.api.album.AlbumInfoApi;
+import com.bruce.designer.api.user.UserFansApi;
+import com.bruce.designer.constants.BundleKey;
 import com.bruce.designer.model.UserFan;
 import com.bruce.designer.model.json.JsonResultBean;
 import com.bruce.designer.util.ApiUtil;
@@ -38,7 +41,7 @@ public class Activity_UserFans extends BaseActivity {
 		
 		Intent intent = getIntent();
 		//获取userid
-		userId =  intent.getIntExtra(ConstantKey.BUNDLE_USER_INFO_ID, 0);
+		userId =  intent.getIntExtra(BundleKey.BUNDLE_USER_INFO_ID, 0);
 		
 		//init view
 		titlebarView = findViewById(R.id.titlebar_return);
@@ -126,7 +129,11 @@ public class Activity_UserFans extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getUserFans(userId);
+//				JsonResultBean jsonResult = ApiUtil.getUserFans(userId);
+				
+				UserFansApi api = new UserFansApi(userId);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
+				
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = handler.obtainMessage(0);
 					message.obj = jsonResult.getData();
