@@ -42,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="5.0dip"
-            android:background="@drawable/follow_button_bg"
+            android:background="@drawable/button_green_bg"
             android:text="关注"
             android:textColor="#ffffffff"
             android:textSize="12.0sp"/>
@@ -53,7 +53,7 @@
             android:layout_height="28.0dip"
             android:layout_alignParentRight="true"
             android:layout_marginTop="5.0dip"
-            android:background="@drawable/edit_profile_button_bg"
+            android:background="@drawable/button_grey_bg"
             android:text="已关注"
             android:textColor="#ff999999"
             android:textSize="12.0sp"

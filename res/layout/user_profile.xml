@@ -10,20 +10,23 @@
         android:layout_height="136.0dip"
         android:padding="10.0dip" >
 
-       <!--  <com.nice.main.views.SquareImageView
+        <!--
+             <com.nice.main.views.SquareImageView
             android:id="@+id/imgAvatar"
             android:layout_width="106.0dip"
             android:layout_height="106.0dip"
-            android:background="@drawable/btn_grey_bg" /> -->
+            android:background="@drawable/btn_grey_bg" />
+        -->
 
-		<ImageView
+        <ImageView
             android:id="@+id/avatar"
             android:layout_width="106.0dip"
             android:layout_height="106.0dip"
             android:src="@drawable/default_avatar"
             android:visibility="visible" />
 
-        <!-- <ImageView
+        <!--
+             <ImageView
             android:id="@+id/weibo_v"
             android:layout_width="19.0dip"
             android:layout_height="16.0dip"
@@ -32,9 +35,12 @@
             android:layout_marginRight="-9.0dip"
             android:layout_marginTop="-10.0dip"
             android:src="@drawable/weibo_v_big"
-            android:visibility="invisible" /> -->
-		
-		<!-- <RelativeLayout
+            android:visibility="invisible" />
+        -->
+
+
+        <!--
+        <RelativeLayout
 		    android:id="@+id/usernameContainer"
 		    android:layout_width="fill_parent"
 		    android:layout_height="40dp"
@@ -80,16 +86,17 @@
 		    android:layout_alignParentRight="true"
 	        android:layout_alignLeft="@+id/usernameContainer"
 	        android:layout_below="@+id/usernameContainer"
-	    /> -->
-		
+	    />
+        -->
+
         <LinearLayout
             android:id="@+id/snsInfoLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-             android:layout_marginLeft="116.0dip"
-		    android:layout_marginTop="6.0dip"
-            android:orientation="horizontal">
+            android:layout_marginLeft="116.0dip"
+            android:layout_marginTop="6.0dip"
+            android:orientation="horizontal" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -119,9 +126,9 @@
             <LinearLayout
                 android:layout_width="1.0dip"
                 android:layout_height="fill_parent"
-                android:paddingTop="2dp"
+                android:background="@drawable/btn_grey_bg"
                 android:paddingBottom="2dp"
-                android:background="@drawable/btn_grey_bg" />
+                android:paddingTop="2dp" />
 
             <LinearLayout
                 android:id="@+id/followsContainer"
@@ -179,10 +186,10 @@
                     android:textColor="#ff999999"
                     android:textSize="12.0sp" />
             </LinearLayout>
-
         </LinearLayout>
-		
-        <!-- <View
+
+        <!--
+        <View
 			android:id="@+id/split1"
 		    android:layout_width="fill_parent"
 		    android:layout_height="1px"
@@ -190,75 +197,76 @@
 		    android:layout_alignParentRight="true"
 	        android:layout_alignLeft="@+id/usernameContainer"
 	        android:layout_below="@+id/snsInfoLayout"
-	    /> -->
-        
-        <LinearLayout 
+	    />
+        -->
+
+        <LinearLayout
+            android:id="@+id/snsBtnContainer"
             android:layout_width="fill_parent"
             android:layout_height="40.0dip"
             android:layout_alignLeft="@+id/snsInfoLayout"
             android:layout_below="@+id/snsInfoLayout"
             android:layout_marginTop="6.0dip"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
-            >
-           	
+            android:orientation="horizontal" >
+
             <Button
-            android:id="@+id/btnFollow"
-            android:layout_width="fill_parent"
-            android:layout_height="28.0dip"
-            android:background="@drawable/follow_button_bg"
-            android:text="关注"
-            android:layout_marginLeft="10dp"
-            android:textColor="#ffffffff"
-            android:textSize="12.0sp"
-            android:layout_weight="1"
-            />
-            
+                android:id="@+id/btnFollow"
+                android:layout_width="fill_parent"
+                android:layout_height="28.0dip"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_green_bg"
+                android:text="关注"
+                android:textColor="#ffffffff"
+                android:textSize="12.0sp" />
+
             <Button
-            android:id="@+id/btnSendMsg"
-            android:layout_width="fill_parent"
-            android:layout_height="28.0dip"
-            android:background="@drawable/sendmsg_button_bg"
-            android:layout_marginLeft="10dp"
-            android:text="私信"
-            android:textColor="#ffffffff"
-            android:textSize="12.0sp"
-            android:layout_weight="1"
-             />
-            
-             
+                android:id="@+id/btnSendMsg"
+                android:layout_width="fill_parent"
+                android:layout_height="28.0dip"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_orange_bg"
+                android:text="私信"
+                android:textColor="#ffffffff"
+                android:textSize="12.0sp" />
+
             <Button
-            android:id="@+id/btnXX"
+                android:id="@+id/btnXX"
+                android:layout_width="fill_parent"
+                android:layout_height="28.0dip"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_green_bg"
+                android:text="其他"
+                android:textColor="#ffffffff"
+                android:textSize="12.0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/editBtnContainer"
             android:layout_width="fill_parent"
-            android:layout_height="28.0dip"
-            android:background="@drawable/follow_button_bg"
-            android:layout_marginLeft="10dp"
-            android:text="其他"
-            android:textColor="#ffffffff"
-            android:textSize="12.0sp"
-            android:layout_weight="1"
-             />
-            
-           
-        
-        <Button
-            android:id="@+id/btnEditProfile"
-            android:layout_width="223.0dip"
-            android:layout_height="50.0dip"
-            android:layout_alignBottom="@+id/imgAvatar"
+            android:layout_height="40.0dip"
             android:layout_alignLeft="@+id/snsInfoLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignStart="@+id/snsInfoLayout"
-            android:background="@drawable/edit_profile_button_bg"
-            android:text="编辑个人资料"
-            android:textColor="#ff252525"
-            android:textSize="16.0sp"
-            android:visibility="gone" />
-             -->
+            android:layout_below="@+id/snsInfoLayout"
+            android:layout_marginTop="6.0dip"
+            android:gravity="center"
+           
+            >
+            <Button
+                android:id="@+id/btnEditMyInfo"
+                android:layout_width="fill_parent"
+                android:layout_height="50.0dip"
+                android:layout_alignStart="@+id/snsInfoLayout"
+                android:background="@drawable/button_white_bg"
+                android:text="编辑个人资料"
+                android:textColor="#ffffffff"
+                android:textSize="15.0sp" />
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- 
+    <!--
     <TextView
         android:id="@+id/txtDesc"
         android:layout_width="fill_parent"
@@ -268,13 +276,13 @@
         android:paddingRight="10.0dip"
         android:text="个人资料描述"
         android:textColor="#ff252525" />
- -->
+    -->
 
-	<LinearLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1.0dip"
         android:background="#ffeeeeee" />
-	
+
     <LinearLayout
         android:id="@+id/tab"
         android:layout_width="fill_parent"
@@ -337,20 +345,17 @@
                 android:layout_centerVertical="true"
                 android:text="TA的关注" />
         </RelativeLayout>
-        
-        
     </LinearLayout>
-    
-	<LinearLayout
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="1.0dip"
         android:background="#ffeeeeee" />
-	
-	<ListView
-	    android:id="@+id/designerAlbums"
-	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
-	     >
-	</ListView>
-     
+
+    <ListView
+        android:id="@+id/designerAlbums"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ListView>
+
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.bruce.designer.constants;
 
-public interface ConstantKey {
-	
+public interface BundleKey {
 	
 	public static final String BUNDLE_ALBUM_INFO_ID = "bundle_album_info_id";
 	

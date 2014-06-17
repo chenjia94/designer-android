@@ -28,6 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="120.0dip"
         android:text="Sina微博登录"
+        android:textSize="15dp"
         android:background="#ffffff"
         android:visibility="visible" 
         />
@@ -41,6 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="60.0dip"
         android:text="游客登录"
+        android:textSize="15dp"
         android:background="#ffffff"
         android:visibility="visible" />
     

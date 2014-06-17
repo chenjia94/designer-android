@@ -19,7 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bruce.designer.R;
-import com.bruce.designer.constants.ConstantKey;
+import com.bruce.designer.api.ApiWrapper;
+import com.bruce.designer.api.user.UserFansApi;
+import com.bruce.designer.api.user.UserFollowsApi;
+import com.bruce.designer.constants.BundleKey;
 import com.bruce.designer.model.User;
 import com.bruce.designer.model.UserFollow;
 import com.bruce.designer.model.json.JsonResultBean;
@@ -44,7 +47,7 @@ public class Activity_UserFollows extends BaseActivity {
 		
 		Intent intent = getIntent();
 		//获取userid
-		userId =  intent.getIntExtra(ConstantKey.BUNDLE_USER_INFO_ID, 0);
+		userId =  intent.getIntExtra(BundleKey.BUNDLE_USER_INFO_ID, 0);
 		
 		//init view
 		titlebarView = findViewById(R.id.titlebar_return);
@@ -132,7 +135,10 @@ public class Activity_UserFollows extends BaseActivity {
 			@Override
 			public void run() {
 				Message message;
-				JsonResultBean jsonResult = ApiUtil.getUserFollows(userId);
+				
+				UserFollowsApi api = new UserFollowsApi(userId);
+				JsonResultBean jsonResult = ApiWrapper.invoke(context, api);
+				
 				if(jsonResult!=null&&jsonResult.getResult()==1){
 					message = handler.obtainMessage(0);
 					message.obj = jsonResult.getData();
