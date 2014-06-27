@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bruce.designer.AppApplication;
 import com.bruce.designer.R;
 import com.bruce.designer.api.ApiWrapper;
 import com.bruce.designer.api.account.WeiboLoginApi;
@@ -16,6 +17,7 @@ import com.bruce.designer.constants.ConstantOAuth;
 import com.bruce.designer.model.UserPassport;
 import com.bruce.designer.model.json.JsonResultBean;
 import com.bruce.designer.util.LogUtil;
+import com.bruce.designer.util.SharedPreferenceUtil;
 import com.bruce.designer.util.UiUtil;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuth;
@@ -40,7 +42,6 @@ public class Activity_Login extends BaseActivity{
 		Intent intent = new Intent(context, Activity_Login.class);
 		context.startActivity(intent);
 	}
-	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,6 @@ public class Activity_Login extends BaseActivity{
                 finish();
                 //TODO 向服务器提交token
 //                weiboLogin(uid, accessToken, new WeiboLoginListener());
-                
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；

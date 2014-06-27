@@ -19,7 +19,7 @@ import com.bruce.designer.util.JsonUtil;
  *
  */
 public class RegisterLoginApi extends AbstractApi{
-	
+
 	private String REQUESTS_URI= Config.JINWAN_API_PREFIX+"/register.json";
 	
 	private Map<String, String> paramMap = null;
